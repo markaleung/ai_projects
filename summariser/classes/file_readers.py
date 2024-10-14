@@ -12,7 +12,8 @@ class _Reader:
         for self.file in tqdm.tqdm(os.listdir(self.config.folder)):
             if self.file.endswith(self.extension):
                 self._read_file()
-        self._make_df()
+        if len(self.items) > 0:
+            self._make_df()
 
 class TextReader(_Reader):
     def _set_subclass_variables(self):

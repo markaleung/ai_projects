@@ -35,9 +35,13 @@ class Manager(abc.ABC):
         self._df_reader.main()
     def _join_dfs(self):
         print('join tables')
-        self._join = (
-            self._table_maker.df.merge(self._df_reader.df, how = 'left')
-        )
+        if hasattr(self._df_reader, 'df'):
+            self._join = (
+                self._table_maker.df.merge(self._df_reader.df, how = 'left')
+            )
+        else:
+            self._join = self._table_maker.df
+            self._join['translation'] = float('nan')
         print('run model')
     def _run_model(self):
         self._model = self._model_class(

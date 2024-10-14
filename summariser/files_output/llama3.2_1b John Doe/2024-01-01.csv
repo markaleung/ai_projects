@@ -1,0 +1,6 @@
+datetime,phone,date,translation
+2024-01-01 12:00:00,John Doe,2024-01-01,"The translation of ""Hello"" in English is ""Hi"". 
+
+So, if we translate the original message, it would be:
+
+""Hi"""
