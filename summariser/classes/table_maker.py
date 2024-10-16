@@ -1,5 +1,6 @@
-import re
+import os
 import pandas as pd
+import re
 import tqdm
 
 class Parser:
@@ -41,15 +42,15 @@ class TableMaker:
     def __init__(self, config_):
         self.config = config_
         self._dicts = []
-    def _read_df(self):
+    def _read_text(self):
         self._parser = Parser()
         self._messages = self.config.read(self.config.file_chat).split('\n')
-        self.phones = dict(pd.read_csv(self.config.file_phone).values)
     def _make_df(self):
         self.df_raw = pd.DataFrame(self._dicts)
         self.df_raw.datetime = pd.to_datetime(self.df_raw.datetime, format = "%d/%m/%Y, %H:%M")
         self.df_raw['date'] = self.df_raw.datetime.dt.date
     def _map_phone_names(self):
+        self.phones = dict(pd.read_csv(self.config.file_phone).values)
         self.missing = sorted(set(self.df_raw.phone.unique()) ^ set(self.phones.keys()))
         if len(self.missing) > 0:
             print('\n'.join(self.missing))
@@ -64,9 +65,10 @@ class TableMaker:
         self.df.to_csv(self.config.file_df, index = False)
         self.df_group = self.df.groupby('date').size().to_frame('tm').reset_index()
     def main(self):
-        self._read_df()
+        self._read_text()
         for self._parser.raw in tqdm.tqdm(self._messages):
             self._dicts.append(self._parser.main())
         self._make_df()
-        self._map_phone_names()
+        if os.path.exists(self.config.file_phone):
+            self._map_phone_names()
         self._group_df()
