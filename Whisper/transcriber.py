@@ -34,7 +34,6 @@ class Wav:
     def main(self):
         self.delete_wav()
         self.extract_wav()
-
 class Model:
     def __init__(self, config_):
         self.config = config_
@@ -65,7 +64,6 @@ class DFFormatter:
     def main(self):
         self.df = pd.DataFrame(self.config.model_output['chunks'])
         self.df.to_csv(self.config.filename_out)
-
 class SRTFormatter:
     def __init__(self, config_):
         self.config = config_
@@ -115,7 +113,6 @@ class FileRunner:
         self._extract_wav()
         self._run_model()
         self._format_srt()
-
 class FolderRunner:
     def __init__(self, folder: str, model: str):
         self.folder = folder
