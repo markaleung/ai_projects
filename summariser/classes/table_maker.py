@@ -51,7 +51,7 @@ class TableMaker:
         self.df_raw['date'] = self.df_raw.datetime.dt.date
     def _map_phone_names(self):
         self.phones = dict(pd.read_csv(self.config.file_phone).values)
-        self.missing = sorted(set(self.df_raw.phone.unique()) ^ set(self.phones.keys()))
+        self.missing = sorted(set(self.df_raw.phone.unique()) - set(self.phones.keys()))
         if len(self.missing) > 0:
             print('\n'.join(self.missing))
             raise Exception(f'{len(self.missing)} are missing')
