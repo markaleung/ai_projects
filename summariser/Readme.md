@@ -2,6 +2,10 @@
 - Install python, with an optional virtual environment
 - Type `pip install requirements.txt`
 
+# How to Prepare files_input
+- Export the whatsapp conversation (see WhatsApp Chat with John Doe.txt)
+- Map phone numbers to names (see phone_name John Doe.csv)
+
 # How to Run the Repository
 - Type `jupyter notebook`
 - Run Summariser.ipynb
