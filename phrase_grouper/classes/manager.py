@@ -1,6 +1,3 @@
-import pandas as pd
-import addModules
-import googleio
 from classes import data, models
 
 class Config:
