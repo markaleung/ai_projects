@@ -1,0 +1,7 @@
+embeddings
+jupyter
+nltk
+numpy
+pandas
+scikit-learn
+tqdm
