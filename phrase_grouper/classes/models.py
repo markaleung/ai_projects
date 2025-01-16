@@ -7,13 +7,31 @@ import numpy as np
 import pandas as pd
 import tqdm
 
+class Glove:
+    def __init__(self):
+        self.glove = embeddings.GloveEmbedding('common_crawl_840', d_emb=300, show_progress=True)
+    def main(self, row):
+        output = []
+        for word in row.split(' '):
+            vector = self.glove.emb(word)
+            if None in vector:
+                pass
+                # print(word)
+            else:
+                output.append(vector)
+        output = np.array([output]).mean(axis = 1)
+        if output.shape == (1, 300):
+            return output
+        else:
+            return None
+
 class Vectoriser:
     def __init__(self, config_):
         self.config = config_
         nltk.download('stopwords')
         self.stop_words = set(stopwords.words('english'))
         self.lemmatizer = WordNetLemmatizer()
-        self.glove = embeddings.GloveEmbedding('common_crawl_840', d_emb=300, show_progress=True)
+        self.model = Glove()
     def clean_words(self, series: pd.Series) -> pd.Series:
         # Punctuation
         series = series.str.replace('-', '').str.lower().fillna('').astype(str)
@@ -31,16 +49,8 @@ class Vectoriser:
         rows2 = []
         vectors = []
         for row in tqdm.tqdm(rows):
-            output = []
-            for word in row.split(' '):
-                vector = self.glove.emb(word)
-                if None in vector:
-                    pass
-                    # print(word)
-                else:
-                    output.append(vector)
-            output = np.array([output]).mean(axis = 1)
-            if output.shape == (1, 300):
+            output = self.model.main(row)
+            if output is not None:
                 rows2.append(row)
                 vectors.append(output)
         vectors = np.concatenate(vectors, axis = 0)
