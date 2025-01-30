@@ -9,6 +9,8 @@
 # Composition Tree
 - managers.FolderRunner
     - managers.FileRunner
-        - models.Wav
-        - models.Model
-        - formatters.DFFormatter/SRTFormatter
+        - models.Wav: ffmpeg, write to temp.wav
+        - models.Model: hugging face
+        - formatters.DFFormatter: write dataframe to csv
+        - formatters.SRTFormatter: use SRT template
+
