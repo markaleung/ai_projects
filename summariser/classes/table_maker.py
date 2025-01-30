@@ -50,7 +50,9 @@ class TableMaker:
         self.df_raw.datetime = pd.to_datetime(self.df_raw.datetime, format = "%d/%m/%Y, %H:%M")
         self.df_raw['date'] = self.df_raw.datetime.dt.date
     def _map_phone_names(self):
-        self.phones = dict(pd.read_csv(self.config.file_phone).values)
+        self.phones = pd.read_csv(self.config.file_phone)
+        assert len(self.phones) == self.phones['name'].nunique()
+        self.phones = dict(self.phones.values)
         self.missing = sorted(set(self.df_raw.phone.unique()) - set(self.phones.keys()))
         if len(self.missing) > 0:
             print('\n'.join(self.missing))
