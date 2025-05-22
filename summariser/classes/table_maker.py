@@ -49,10 +49,12 @@ class TableMaker:
         self.df_raw = pd.DataFrame(self._dicts)
         self.df_raw.datetime = pd.to_datetime(self.df_raw.datetime, format = "%d/%m/%Y, %H:%M")
         self.df_raw['date'] = self.df_raw.datetime.dt.date
-    def _map_phone_names(self):
+    def _test_phone_names_dupes(self):
         self.phones = pd.read_csv(self.config.file_phone)
-        assert len(self.phones) == self.phones['name'].nunique()
+        self.phone_dupe = self.phones[self.phones.name.duplicated()].copy()
+        assert len(self.phone_dupe) == 0, self.phone_dupe
         self.phones = dict(self.phones.values)
+    def _map_phone_names(self):
         self.missing = sorted(set(self.df_raw.phone.unique()) - set(self.phones.keys()))
         if len(self.missing) > 0:
             print('\n'.join(self.missing))
@@ -72,5 +74,6 @@ class TableMaker:
             self._dicts.append(self._parser.main())
         self._make_df()
         if os.path.exists(self.config.file_phone):
+            self._test_phone_names_dupes()
             self._map_phone_names()
         self._group_df()
