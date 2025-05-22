@@ -12,15 +12,18 @@
 
 # Composition Tree
 - manager
-    - table_maker
-    - reader
-    - model_runners
+    - table_maker: parse lines in whatsapp, join phone names
+    - df_reader: get existing translations
+    - join_dfs: check for missing translations
+    - for day, df_day in join.groupby('date'):
+        - model_runner: only if translations are missing
+    - file_reader: read model output
 
 # Inheritance Tree
-- manager.Manager
-    - Translator
-    - Summariser
+- manager.Manager: choose model, reader classes
+    - Translator: translate each message
+    - Summariser: summarise joined messages
 - file_readers.Reader
-    - TextReader
-    - DfReader
-    - DfCleanReader
+    - TextReader: one line per text file
+    - DfReader: concat csv files
+        - DfCleanReader: remove translation headers

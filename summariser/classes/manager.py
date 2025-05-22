@@ -25,12 +25,10 @@ class Manager(abc.ABC):
         self.config = config_
     def _make_table(self):
         print('make table')
-        # if not hasattr(self.config, '_table_maker'):
         self._table_maker = table_maker.TableMaker(config_ = self.config)
         self._table_maker.main()
     def _read_dfs(self):
         print('read files')
-        # if not hasattr(self.config, '_file_reader'):
         self._df_reader = file_readers.DfReader(config_ = self.config)
         self._df_reader.main()
     def _join_dfs(self):
@@ -50,7 +48,6 @@ class Manager(abc.ABC):
         self._model.main()
     def _read_files(self):
         print('read files')
-        # if not hasattr(self.config, '_file_reader'):
         self._file_reader = self._reader_class(config_ = self.config)
         self._file_reader.main()
     def _upload_dfs(self):
@@ -65,7 +62,8 @@ class Manager(abc.ABC):
         self._read_dfs()
         self._join_dfs()
         for self.day, self.df_day in self._tqdm(self._join.groupby('date')):
-            self._run_model()
+            if len(self.df_day.query('translation != translation')) > 0:
+                self._run_model()
         self._read_files()
         self._upload_dfs()
 
