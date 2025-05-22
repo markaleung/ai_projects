@@ -18,10 +18,9 @@ class Summariser:
         with open(self._path, 'w') as self._file:
             self._file.write(self._response['response'])
     def main(self):
-        if len(self.df.query('translation != translation')) > 0:
-            for self._row in self.df.itertuples():
-                self._append_text()
-            self._run_model()
+        for self._row in self.df.itertuples():
+            self._append_text()
+        self._run_model()
 
 class Translator:
     def __init__(self, day, df, config_):
@@ -40,7 +39,6 @@ class Translator:
         self.df.loc[self.df_short.index, 'translation'] = self.df_short.translation
         self.df.drop('message', axis = 1).to_csv(self._path)
     def main(self):
-        if len(self.df.query('translation != translation')) > 0:
-            for self._row in tqdm.tqdm(self.df_short.itertuples(), total = len(self.df_short)):
-                self.lines.append(self._run_model())
-            self._make_df()
+        for self._row in tqdm.tqdm(self.df_short.itertuples(), total = len(self.df_short)):
+            self.lines.append(self._run_model())
+        self._make_df()
