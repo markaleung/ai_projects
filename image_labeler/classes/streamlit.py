@@ -29,7 +29,7 @@ class ImageNet:
     def _get_label_random(self):
         self.grouped2 = self.grouped.sample(1, weights = self.grouped.score)
         self.label = self.grouped2.label.values[0]
-    def _get_label_dropdown(self):   
+    def _get_label_dropdown(self):
         self.label = st.selectbox('Label', self.grouped.label)
         self.grouped2 = self.grouped.query('label == @self.label')
     def _get_label(self):
@@ -50,13 +50,9 @@ class ImageNet:
             for filename in self.filenames
         ]
     def _write(self):
-        self.col1, self.col2, self.col3 = st.columns(3)
-        with self.col1:
-            st.image(self.paths[0:5])
-        with self.col2:
-            st.image(self.paths[5:10])
-        with self.col3:
-            st.image(self.paths[10:15])
+        for index in range(3):
+            with self.cols[index]:
+                st.image(self.paths[index * 5:(index + 1) * 5])
     def main(self):
         self._read_df()
         with st.sidebar:
