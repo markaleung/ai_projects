@@ -19,14 +19,15 @@ class ImageNet:
     def _filter_and_group_df(self):
         self.df = self.df.query('score > @self.threshold')
         self.grouped = (
-            self.df.groupby('label').size()
-            .to_frame('size_').reset_index()
+            self.df.groupby('label')
+            .agg(size_ = ('label', 'size'), score = ('score', 'sum'))
+            .reset_index()
             .sort_values('size_', ascending = False)
             .query('size_ > 15')
         )
         self.grouped['combined'] = self.grouped.size_.astype(str) + ' ' + self.grouped.label
     def _get_label_random(self):
-        self.grouped2 = self.grouped.sample(1, weights = self.grouped.size_)
+        self.grouped2 = self.grouped.sample(1, weights = self.grouped.score)
         self.label = self.grouped2.label.values[0]
     def _get_label_dropdown(self):   
         self.label = st.selectbox('Label', self.grouped.label)
