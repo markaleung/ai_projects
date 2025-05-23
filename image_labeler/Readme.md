@@ -17,3 +17,13 @@
         - run_model: 1 row per label from hugging face
     - make_df: rows from model
     - write_out: to csv
+# Function Tree
+- streamlit
+    - self._read_df()
+    - self._set_variables_ui()
+    - self._filter_and_group_df()
+    - self._get_label()
+        - self._get_label_random()
+        - self._get_label_dropdown()
+    - self._get_paths()
+    - self._write()
